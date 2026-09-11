@@ -2,53 +2,43 @@
 
 **How the CCAR-F exam thinks, and how to think with it.**
 
-This is the companion you read last. Other resources cover the material; this one teaches the judgment the exam actually grades, and it teaches every domain through decisions made in a real production system: a governed MCP gateway that lets an AI assistant query Looker under each user's own permissions, rolled out company-wide. Passing the exam turned out to be mostly a matter of recognizing decisions that system had already forced.
+There is no memorizing your way through CCAR-F. Every item is a judgment call about a production system, and the wrong options are the ones that sound reasonable. This guide teaches the judgment: seven instincts that rule out most wrong answers before you have thought about content, a lookup from symptom to fix, and a drill for the mechanism pairs the exam loves to confuse. Every concept is shown at the moment it had consequences, inside a real MCP gateway that let a company's AI assistants query its data under each user's own permissions.
 
-> Written after passing the exam in September 2026. Every practice item here is original, modelled on the twelve samples Anthropic publishes in the official exam guide. Nothing from the real exam appears in this repository, and nothing will. See [CONTRIBUTING](CONTRIBUTING.md).
-
-### About the production system
-
-Every "From production" block in this guide refers to one system: a gateway that sits between AI assistants and Looker, a business intelligence platform. It exposes a small set of read-only tools over the Model Context Protocol, runs every query under the requesting user's own permissions, enforces a policy file in code, and stamps every response with provenance. It was built and rolled out company-wide by the author's team over roughly six months, and most of the exam's judgment calls turned up in it first. The company, code identifiers, and colleagues are removed; the decisions and the numbers are exact. You do not need to know anything about Looker or the gateway to use this guide. The blocks are there to show what each concept looks like when it has consequences.
+*Written after passing the exam in September 2026. All 59 practice items are original, modelled on the twelve samples Anthropic publishes. Nothing from the real exam appears here, and nothing will. See [CONTRIBUTING](CONTRIBUTING.md).*
 
 ---
 
-## The exam, in one table
+## Start here
 
-| | |
+| Time you have | Do this |
 |---|---|
-| Items | 60, multiple-choice and multiple-response |
-| Time | 120 minutes (two minutes per item) |
-| Structure | 4 scenarios drawn from a bank of 6; each frames a set of items |
-| Passing | 720 on a 100–1000 scale |
-| Delivery | Pearson VUE, online proctored or test centre |
-| Access | Registration runs through the Anthropic Partner Academy and requires affiliation with a Claude Partner Network organization |
-| Valid | 12 months; renewal is a free non-proctored assessment |
+| **Ninety minutes** | Read [how the exam thinks](guide/00-how-the-exam-thinks.md), then the [symptom → fix table](reference/symptom-to-fix.md), then take the [confusable-pairs drill](practice/confusable-pairs.md). This is the pre-exam morning routine. |
+| **A weekend** | Day one: how the exam thinks, then [Domain 1](guide/01-agentic-architecture.md), the largest domain and the one most builders find least familiar. Day two: Domains 2–5, then the [mock](practice/mock-exam.md) under exam timing, 32 items in 64 minutes. For every miss, name which instinct the correct answer used. |
+| **Two weeks** | One domain every two days with its quick checks. The mock at the end of week one and again cold at the end of week two. The [reference tables](reference/by-domain-tables.md) as your final review. |
 
-**Domain weights**
+Read the official exam guide first. Read this last.
 
-| Domain | Weight |
-|---|---|
-| 1 · Agentic Architecture & Orchestration | 27% |
-| 2 · Tool Design & MCP Integration | 18% |
-| 3 · Claude Code Configuration & Workflows | 20% |
-| 4 · Prompt Engineering & Structured Output | 20% |
-| 5 · Context Management & Reliability | 15% |
+## The seven instincts
 
-## What is different here
+Every official sample answer rewards the same seven judgments. On a scenario item they eliminate two or three options before you have read the technical detail.
 
-1. **A judgment framework, not a summary.** Seven instincts distilled from every official sample answer, a 30-row symptom → root cause → fix lookup, a proportionate-response ladder, and the item-format tells (when a "do both" option is the trap, and when it is the answer).
-2. **Production case notes in every domain.** Each concept is anchored to a decision from a real gateway: an identity resolver that refuses to guess when two accounts match, byte ceilings born from a response that reached 691,000 tokens, a filter lookup rewritten to have three states because two states let a failure masquerade as success. Identifiers are removed; the decisions are exact.
-3. **Confusable pairs, drilled.** The exam's hardest items put two plausible mechanisms side by side (`Task` calls vs `fork_session`, PostToolUse vs interception hooks, `tool_choice: "any"` vs forced). A dedicated drill trains mechanism identity, the single most common cause of a wrong answer by someone who knows the material.
+| | Instinct | In practice |
+|---|---|---|
+| 1 | **Root cause first** | Fix the layer the evidence points at. If every subagent succeeded and the output is wrong, look up at the coordinator. |
+| 2 | **Proportionate first step** | Descriptions before few-shot, few-shot before gates, gates before infrastructure. A classifier is almost never the answer. |
+| 3 | **Deterministic where it matters** | Money, identity, compliance, "never" or "always" → code, not prompts. The failure percentage in the stem *is* the prompt's failure rate. |
+| 4 | **Distrust soft proxies** | Self-reported confidence, sentiment, "be conservative", "high-confidence only" are always wrong. |
+| 5 | **Match the API to the latency** | Blocking → synchronous. Overnight and audit work → Batches. |
+| 6 | **Least privilege, scoped exceptions** | Four or five role-scoped tools, one narrow tool for a frequent cross-role need, everything complex through the coordinator. |
+| 7 | **Never hide failure** | No empty-as-success, no generic "failed", no killing the run on one timeout. Structured context and partial results. |
+
+## Why this guide
+
+1. **A judgment framework, not a summary.** The seven instincts, a 30-row symptom → root cause → fix lookup, a proportionate-response ladder, and the item-format tells: when a "do both" option is the trap, and when it is the answer.
+2. **Every concept shown with consequences.** Each domain is anchored to decisions from one real system: an identity resolver that refuses to guess when two accounts match, byte ceilings born from a response that reached 691,000 tokens, a filter lookup rewritten to have three states because two states let a failure masquerade as success. Identifiers are removed; the decisions are exact.
+3. **Confusable pairs, drilled.** The exam's hardest items put two plausible mechanisms side by side: `Task` calls vs `fork_session`, PostToolUse vs interception hooks, `tool_choice: "any"` vs forced. A dedicated drill trains mechanism identity, the most common cause of a wrong answer by someone who knows the material.
 4. **What is *not* tested, said plainly.** OAuth, MCP hosting, infrastructure, rate limits, caching internals. If that is where your expertise lives, it is where your study time is wasted.
-5. **Small on purpose.** Roughly the twenty percent of material that decides eighty percent of items.
-
-## How to use it
-
-**In ninety minutes** — read [`guide/00-how-the-exam-thinks.md`](guide/00-how-the-exam-thinks.md), then [`reference/symptom-to-fix.md`](reference/symptom-to-fix.md), then take [`practice/confusable-pairs.md`](practice/confusable-pairs.md). This is the pre-exam morning routine.
-
-**In a weekend** — Day one: `guide/00` and Domain 1 (the largest, and the one most builders find least familiar). Day two: Domains 2–5, then the mock under exam timing (32 items, 64 minutes). Grade it. For every miss, name which instinct the correct answer used.
-
-**In two weeks** — one domain every two days with its quick checks; the mock at the end of week one and again cold at the end of week two; the reference tables as your final review.
+5. **Small on purpose.** Roughly the twenty percent of material that decides eighty percent of items. About 17,000 words, all of it load-bearing.
 
 ## Contents
 
@@ -66,23 +56,33 @@ Every "From production" block in this guide refers to one system: a gateway that
 | [`reference/recall-facts.md`](reference/recall-facts.md) | The exact facts: flags, keys, limits. The one perishable file, dated |
 | [`reference/by-domain-tables.md`](reference/by-domain-tables.md) | Symptom → expected technique, one table per domain, built to print |
 
-## The seven instincts
+## The exam, in one table
 
-Every official sample answer rewards the same seven judgments. On a scenario item they eliminate two or three options before you have thought about content.
+| | |
+|---|---|
+| Items | 60, multiple-choice and multiple-response |
+| Time | 120 minutes (two minutes per item) |
+| Structure | 4 scenarios drawn from a bank of 6; each frames a set of items |
+| Passing | 720 on a 100–1000 scale |
+| Delivery | Pearson VUE, online proctored or test centre |
+| Access | Registration runs through the Anthropic Partner Academy and requires affiliation with a Claude Partner Network organization |
+| Valid | 12 months; renewal is a free non-proctored assessment |
 
-| | Instinct | In practice |
-|---|---|---|
-| 1 | **Root cause first** | Fix the layer the evidence points at. If every subagent succeeded and the output is wrong, look up at the coordinator. |
-| 2 | **Proportionate first step** | Descriptions before few-shot, few-shot before gates, gates before infrastructure. A classifier is almost never the answer. |
-| 3 | **Deterministic where it matters** | Money, identity, compliance, "never" or "always" → code, not prompts. The failure percentage in the stem *is* the prompt's failure rate. |
-| 4 | **Distrust soft proxies** | Self-reported confidence, sentiment, "be conservative", "high-confidence only" are always wrong. |
-| 5 | **Match the API to the latency** | Blocking → synchronous. Overnight and audit work → Batches. |
-| 6 | **Least privilege, scoped exceptions** | Four or five role-scoped tools, one narrow tool for a frequent cross-role need, everything complex through the coordinator. |
-| 7 | **Never hide failure** | No empty-as-success, no generic "failed", no killing the run on one timeout. Structured context and partial results. |
+| Domain | Weight |
+|---|---|
+| 1 · Agentic Architecture & Orchestration | 27% |
+| 2 · Tool Design & MCP Integration | 18% |
+| 3 · Claude Code Configuration & Workflows | 20% |
+| 4 · Prompt Engineering & Structured Output | 20% |
+| 5 · Context Management & Reliability | 15% |
 
 ## Not tested
 
 Out of scope by the official guide, and a trap for experienced builders whose expertise lives here: OAuth and authentication protocols · deploying or hosting MCP servers · rate limits, quotas and pricing · streaming and server-sent events · prompt-caching internals beyond knowing it exists · token counting · fine-tuning · embeddings and vector databases · vision · computer use · model benchmarking · cloud-provider specifics.
+
+## About the production system
+
+Every "From production" block in this guide refers to one system: a gateway that sits between AI assistants and Looker, a business intelligence platform. It exposes a small set of read-only tools over the Model Context Protocol, runs every query under the requesting user's own permissions, enforces a policy file in code, and stamps every response with provenance. It was built and rolled out company-wide by the author's team over roughly six months, and most of the exam's judgment calls turned up in it first. The company, code identifiers, and colleagues are removed; the decisions and the numbers are exact. You do not need to know anything about Looker or the gateway to use this guide. The blocks are there to show what each concept looks like when it has consequences.
 
 ## Official sources
 
@@ -94,8 +94,6 @@ Everything here is built from, and checked against, Anthropic's own material. Ea
 | Anthropic Academy courses that cover the tested stack | [Claude Code in Action](https://anthropic.skilljar.com/claude-code-in-action) · [Introduction to Model Context Protocol](https://anthropic.skilljar.com/introduction-to-model-context-protocol) · [Model Context Protocol: Advanced Topics](https://anthropic.skilljar.com/model-context-protocol-advanced-topics) · [Building with the Claude API](https://anthropic.skilljar.com/claude-with-the-anthropic-api) |
 | Product documentation | [Claude Code](https://code.claude.com/docs/en/overview) · [Claude Agent SDK](https://platform.claude.com/docs/en/agent-sdk/overview) · [Tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview) · [Prompt engineering](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview) · [Model Context Protocol specification](https://modelcontextprotocol.io/specification/2025-06-18) |
 | Anthropic engineering posts the blueprint leans on | [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) · [Writing tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents) · [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) · [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices) · [How we built our multi-agent research system](https://www.anthropic.com/engineering/multi-agent-research-system) |
-
-Read the official guide first. Read this last.
 
 ## Maintenance
 
