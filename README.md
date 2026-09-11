@@ -6,6 +6,10 @@ This is the companion you read last. Other resources cover the material; this on
 
 > Written after passing the exam in September 2026. Every practice item here is original, modelled on the twelve samples Anthropic publishes in the official exam guide. Nothing from the real exam appears in this repository, and nothing will. See [CONTRIBUTING](CONTRIBUTING.md).
 
+### About the production system
+
+Every "From production" block in this guide refers to one system: a gateway that sits between AI assistants and Looker, a business intelligence platform. It exposes a small set of read-only tools over the Model Context Protocol, runs every query under the requesting user's own permissions, enforces a policy file in code, and stamps every response with provenance. It was built and rolled out company-wide by the author's team over roughly six months, and most of the exam's judgment calls turned up in it first. The company, code identifiers, and colleagues are removed; the decisions and the numbers are exact. You do not need to know anything about Looker or the gateway to use this guide. The blocks are there to show what each concept looks like when it has consequences.
+
 ---
 
 ## The exam, in one table

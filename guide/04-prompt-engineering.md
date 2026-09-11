@@ -1,5 +1,7 @@
 # Domain 4 · Prompt Engineering & Structured Output (20%)
 
+> Case blocks marked **From production** refer to the system described in [the README](../README.md#about-the-production-system).
+
 Precision over vibes: explicit criteria, few-shot for the ambiguous, schemas for the guaranteed, batches for the patient.
 
 **A framing note before the content.** This domain reads as if it were about document extraction, because "documents" appear everywhere. It is not. Domain 4 is the primary domain for *two* exam scenarios, CI code review and structured data extraction, so every technique gets illustrated in both costumes. Two of the six task statements (4.1 explicit criteria and 4.6 multi-pass review) never mention a document at all. Answer the *technique*, ignore the noun: "output format is inconsistent despite detailed instructions" means few-shot whether the output is review findings or extracted fields.

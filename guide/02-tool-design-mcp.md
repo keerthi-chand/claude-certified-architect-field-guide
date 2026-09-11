@@ -1,5 +1,7 @@
 # Domain 2 · Tool Design & MCP Integration (18%)
 
+> Case blocks marked **From production** refer to the system described in [the README](../README.md#about-the-production-system).
+
 If you have shipped an MCP server, this is home ground. The exam tests the principles you learned by watching an agent misuse your tools, plus a handful of exact configuration facts to memorize.
 
 ## 2.1 Descriptions decide selection

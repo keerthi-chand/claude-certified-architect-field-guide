@@ -1,5 +1,7 @@
 # Domain 3 · Claude Code Configuration & Workflows (20%)
 
+> Case blocks marked **From production** refer to the system described in [the README](../README.md#about-the-production-system).
+
 Daily users of Claude Code know all of this by feel. The exam wants the mechanics named precisely: which scope, which frontmatter key, which flag.
 
 ## 3.1 CLAUDE.md hierarchy and modularity

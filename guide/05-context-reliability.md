@@ -1,5 +1,7 @@
 # Domain 5 · Context Management & Reliability (15%)
 
+> Case blocks marked **From production** refer to the system described in [the README](../README.md#about-the-production-system).
+
 The smallest domain, and the one where production scars pay off most directly. Anchor each concept to an incident and move on.
 
 ## 5.1 Preserving critical information in long interactions

@@ -1,5 +1,7 @@
 # Domain 1 · Agentic Architecture & Orchestration (27%)
 
+> Case blocks marked **From production** refer to the system described in [the README](../README.md#about-the-production-system).
+
 The largest domain, and for most people who have *built* MCP servers the least familiar one, because it sits on the other side of the wire: you built the tools an agent calls; this domain builds the agent that calls them. Every time an Agent SDK concept appears, ask what it looks like from the tool server's side. Usually you have already met it there.
 
 ## 1.1 The agentic loop

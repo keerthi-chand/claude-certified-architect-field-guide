@@ -1,5 +1,7 @@
 # How the exam thinks
 
+> Case blocks marked **From production** refer to the system described in [the README](../README.md#about-the-production-system).
+
 CCAR-F is a judgment exam wearing a multiple-choice costume. Every item describes a production situation, offers four plausible-sounding responses, and grades whether you recognize the *shape* of the right one. Knowing the material is necessary; it is not what separates 700 from 800. What separates them is a small set of instincts that the official sample answers reward over and over.
 
 Learn these first. On most items they eliminate two or three options before you have thought about content.
